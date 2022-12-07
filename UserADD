@@ -2,7 +2,7 @@
 $Password = ConvertTo-SecureString -String '1qaz2wsx#EDC$RFV' -AsPlainText -Force
 
 #List of users to be added
-$users = @("josh.ferrer", "brian.dawi", "jeff.ferrer", "stupid.dog", "maria.salguero")
+$users = @("john.mayor", "brian.dawi", "happy.gilmore", "robert.downy", "maria.smith")
 
 #List of groups to add users to
 $groups = @("Domain Users", "Administrators", "Schema Admins", "Enterprise Admins", "Domain Admins", "Group Policy Creator Owners")
