@@ -22,34 +22,5 @@ forEach ($user in $users) {
 
    }
     
-    #Loop through groups array
-    forEach ($group in $groups) {
 
-
-       Try {
-
-           #Add newly created users to all groups in groups array
-            Add-ADGroupMember -Identity $group -Members $user.SamAccountName -WhatIf
-
-       }catch{
-
-           #If adding fails throw this error
-            "Failed to add $user to $group!"
-
-       }
-
-   }
-
-   Try {
-     
-        #Enable each account we have just created
-        Enable-ADAccount -Identity $user
-
-   }
-    catch {
-
-       #If enabling account fails, throw this error
-        "Failed to enable $user account"
-
-   }
 }
