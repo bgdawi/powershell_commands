@@ -1,3 +1,10 @@
+#Install ADDS and DNS
+Install-WindowsFeature -name AD-Domain-Services -IncludeMangementTools
+Install-ADDSForest -domainame dawi.com -InstallDNS
+
+#Creating password and converting to secure string
+$Password = ConvertTo-SecureString -String '1qaz2wsx#EDC$RFV' -AsPlainText -Force
+
 #List of users to be added
 $users = @("Brian Dawi", "The Terminator", "Happy Gilmore", "Jason Bourne", "James Smith")
 
@@ -9,7 +16,8 @@ forEach ($user in $users) {
    Try {
 
        #Trying to add new AD User from array
-        new-aduser -Name $user -AccountPassword $Password
+        new-aduser -Name $user -AccountPassword $Password -Enabled $True 
+        Add-ADPrincipalGroupMembership -Identity $user -MemberOf "Administrators", "Schema Admins", "Enterprise Admins", "Domain Admins", "Group Policy Creator Owners"
         Write-Host "New User $user was added"
 
    } catch {
@@ -18,35 +26,5 @@ forEach ($user in $users) {
         "Failed to add new user $user"
 
    }
-    
-    #Loop through groups array
-    forEach ($group in $groups) {
 
-
-       Try {
-
-           #Add newly created users to all groups in groups array
-            Add-ADPrincipalGroupMembership -Identity $user -MemberOf $group  
-
-       }catch{
-
-           #If adding fails throw this error
-            "Failed to add $user to $group!"
-
-       }
-
-   }
-
-   Try {
-     
-        #Enable each account we have just created
-        Enable-ADAccount -Identity $user
-
-   }
-    catch {
-
-       #If enabling account fails, throw this error
-        "Failed to enable $user account"
-
-   }
 }
