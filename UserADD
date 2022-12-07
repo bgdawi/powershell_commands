@@ -13,7 +13,7 @@ forEach ($user in $users) {
 
        #Trying to add new AD User from array
         new-aduser -Name $user -AccountPassword $Password
-        Write-Host 'New User $user was added'
+        Write-Host "New User $user was added"
 
    } catch {
 
