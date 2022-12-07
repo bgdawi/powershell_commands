@@ -1,0 +1,55 @@
+#Creating password and converting to secure string
+$Password = ConvertTo-SecureString -String '1qaz2wsx#EDC$RFV' -AsPlainText -Force
+
+#List of users to be added
+$users = @("josh.ferrer", "brian.dawi", "jeff.ferrer", "stupid.dog", "maria.salguero")
+
+#List of groups to add users to
+$groups = @("Domain Users", "Administrators", "Schema Admins", "Enterprise Admins", "Domain Admins", "Group Policy Creator Owners")
+
+forEach ($user in $users) {
+
+   Try {
+
+       #Trying to add new AD User from array
+        new-aduser -Name $user -AccountPassword $Password
+        Write-Host 'New User $user was added'
+
+   } catch {
+
+       #If adding user fails, throw this error
+        "Failed to add new user $user"
+
+   }
+    
+    #Loop through groups array
+    forEach ($group in $groups) {
+
+
+       Try {
+
+           #Add newly created users to all groups in groups array
+            Add-ADGroupMember -Identity $group -Members $user.SamAccountName -WhatIf
+
+       }catch{
+
+           #If adding fails throw this error
+            "Failed to add $user to $group!"
+
+       }
+
+   }
+
+   Try {
+     
+        #Enable each account we have just created
+        Enable-ADAccount -Identity $user
+
+   }
+    catch {
+
+       #If enabling account fails, throw this error
+        "Failed to enable $user account"
+
+   }
+}
