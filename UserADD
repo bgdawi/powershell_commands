@@ -1,10 +1,9 @@
-#Creating password and converting to secure string
-$Password = ConvertTo-SecureString -String '1qaz2wsx#EDC$RFV' -AsPlainText -Force
-
 #List of users to be added
-$users = @("USER", "USER", "USER", "USER", "USER")
+$users = @("Brian Dawi", "The Terminator", "Happy Gilmore", "Jason Bourne", "James Smith")
 
-#Go through arrays to add users and thier passwords
+#List of groups to add users to
+$groups = @("Administrators", "Schema Admins", "Enterprise Admins", "Domain Admins", "Group Policy Creator Owners")
+
 forEach ($user in $users) {
 
    Try {
@@ -20,5 +19,34 @@ forEach ($user in $users) {
 
    }
     
+    #Loop through groups array
+    forEach ($group in $groups) {
 
+
+       Try {
+
+           #Add newly created users to all groups in groups array
+            Add-ADPrincipalGroupMembership -Identity $user -MemberOf $group  
+
+       }catch{
+
+           #If adding fails throw this error
+            "Failed to add $user to $group!"
+
+       }
+
+   }
+
+   Try {
+     
+        #Enable each account we have just created
+        Enable-ADAccount -Identity $user
+
+   }
+    catch {
+
+       #If enabling account fails, throw this error
+        "Failed to enable $user account"
+
+   }
 }
