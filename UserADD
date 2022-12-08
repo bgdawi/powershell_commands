@@ -1,6 +1,6 @@
 #Install ADDS and DNS
-Install-WindowsFeature -name AD-Domain-Services -IncludeMangementTools
-Install-ADDSForest -domainame dawi.com -InstallDNS
+Install-WindowsFeature -name AD-Domain-Services -IncludeManagementTools
+Install-ADDSForest -DomainName dawi.com -InstallDNS
 
 #Creating password and converting to secure string
 $Password = ConvertTo-SecureString -String '1qaz2wsx#EDC$RFV' -AsPlainText -Force
