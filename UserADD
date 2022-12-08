@@ -17,6 +17,7 @@ forEach ($user in $users) {
 
        #Trying to add new AD User from array
         new-aduser -Name $user -AccountPassword $Password -Enabled $True 
+       #Adding Users to the groups in the array  
         Add-ADPrincipalGroupMembership -Identity $user -MemberOf "Administrators", "Schema Admins", "Enterprise Admins", "Domain Admins", "Group Policy Creator Owners"
         Write-Host "New User $user was added"
 
